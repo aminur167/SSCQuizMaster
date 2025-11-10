@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSCQuizMaster - এসএসসি কুইজ মাস্টার</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">🧠</div>
+            <div>
+                <h1>SSCQuizMaster</h1>
+                <p class="tagline">এসএসসি পরীক্ষার প্রস্তুতির জন্য সেরা কুইজ অ্যাপ</p>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Subject Selection Screen -->
+        <section class="subject-selection" id="subjectSelection">
+            <h2 class="section-title">বিষয় নির্বাচন করুন</h2>
+            
+            <div class="stream-section">
+                <h3 class="stream-title">বিজ্ঞান বিভাগ</h3>
+                <div class="subject-grid">
+                    <div class="subject-card" data-subject="physics">
+                        <div class="subject-icon">⚛️</div>
+                        <div class="subject-name">পদার্থবিজ্ঞান</div>
+                        <div class="subject-desc">৯টি অধ্যায় - ২৭০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="chemistry">
+                        <div class="subject-icon">🧪</div>
+                        <div class="subject-name">রসায়ন</div>
+                        <div class="subject-desc">১০টি অধ্যায় - ৩০০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="biology">
+                        <div class="subject-icon">🔬</div>
+                        <div class="subject-name">জীববিজ্ঞান</div>
+                        <div class="subject-desc">১০টি অধ্যায় - ৩০০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="math">
+                        <div class="subject-icon">📐</div>
+                        <div class="subject-name">গণিত</div>
+                        <div class="subject-desc">৯টি অধ্যায় - ২৭০টি MCQ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stream-section">
+                <h3 class="stream-title">মানবিক বিভাগ</h3>
+                <div class="subject-grid">
+                    <div class="subject-card" data-subject="history">
+                        <div class="subject-icon">📜</div>
+                        <div class="subject-name">ইতিহাস</div>
+                        <div class="subject-desc">৮টি অধ্যায় - ২৪০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="geography">
+                        <div class="subject-icon">🌍</div>
+                        <div class="subject-name">ভূগোল</div>
+                        <div class="subject-desc">৮টি অধ্যায় - ২৪০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="economics">
+                        <div class="subject-icon">💰</div>
+                        <div class="subject-name">অর্থনীতি</div>
+                        <div class="subject-desc">৮টি অধ্যায় - ২৪০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="civics">
+                        <div class="subject-icon">⚖️</div>
+                        <div class="subject-name">নাগরিকতা</div>
+                        <div class="subject-desc">৭টি অধ্যায় - ২১০টি MCQ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stream-section">
+                <h3 class="stream-title">সাধারণ বিষয়</h3>
+                <div class="subject-grid">
+                    <div class="subject-card" data-subject="bangla">
+                        <div class="subject-icon">📖</div>
+                        <div class="subject-name">বাংলা</div>
+                        <div class="subject-desc">৬টি অধ্যায় - ১৮০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="english">
+                        <div class="subject-icon">🔤</div>
+                        <div class="subject-name">ইংরেজি</div>
+                        <div class="subject-desc">৭টি অধ্যায় - ২১০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="ict">
+                        <div class="subject-icon">💻</div>
+                        <div class="subject-name">তথ্য ও যোগাযোগ প্রযুক্তি</div>
+                        <div class="subject-desc">৮টি অধ্যায় - ২৪০টি MCQ</div>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="islam">
+                        <div class="subject-icon">🕌</div>
+                        <div class="subject-name">ইসলাম শিক্ষা</div>
+                        <div class="subject-desc">৭টি অধ্যায় - ২১০টি MCQ</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter Selection Screen -->
+        <section class="chapter-selection" id="chapterSelection" style="display: none;">
+            <div class="chapter-header">
+                <button class="btn btn-secondary" id="backToSubjects">
+                    ← বিষয় নির্বাচনে ফিরুন
+                </button>
+                <h2 class="section-title" id="chapterSubjectTitle">পদার্থবিজ্ঞান - অধ্যায়সমূহ</h2>
+            </div>
+            
+            <div class="chapter-progress">
+                <div class="progress-info">
+                    <span>মোট অধ্যায়: <strong id="totalChapters">০</strong></span>
+                    <span>মোট MCQ: <strong id="totalMCQs">০</strong></span>
+                </div>
+            </div>
+            
+            <div class="chapter-grid" id="chapterGrid">
+                <!-- Chapters will be dynamically loaded here -->
+            </div>
+        </section>
+        
+        <!-- Quiz Container -->
+        <section class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+                <div class="quiz-title">
+                    <span id="quizSubjectTitle">পদার্থবিজ্ঞান</span> - 
+                    <span id="quizChapterTitle">পরিমাপ ও একক</span>
+                </div>
+                <div class="quiz-stats">
+                    <div class="stat" id="questionCounter">প্রশ্ন: ১/৩০</div>
+                    <div class="stat" id="scoreCounter">স্কোর: ০</div>
+                    <div class="stat" id="timer">সময়: ০০:০০</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 3.33%;"></div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="questionText">
+                    প্রশ্ন এখানে দেখানো হবে...
+                </div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be dynamically added here -->
+                </div>
+            </div>
+            
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" id="prevBtn">পূর্ববর্তী</button>
+                <button class="btn btn-primary" id="nextBtn">পরবর্তী</button>
+                <button class="btn btn-secondary" id="skipBtn">স্কিপ করুন</button>
+                <button class="btn btn-primary" id="submitBtn" style="display: none;">জমা দিন</button>
+            </div>
+        </section>
+        
+        <!-- Results Container -->
+        <section class="results-container" id="resultsContainer">
+            <h2 class="results-title">কুইজ সম্পন্ন!</h2>
+            <div class="score-display" id="finalScore">০/৩০</div>
+            <div class="score-text" id="scoreMessage">আপনার ফলাফল</div>
+            
+            <div class="results-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="correctAnswers">০</div>
+                    <div class="stat-label">সঠিক উত্তর</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="wrongAnswers">০</div>
+                    <div class="stat-label">ভুল উত্তর</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="timeTaken">০০:০০</div>
+                    <div class="stat-label">মোট সময়</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="percentage">০%</div>
+                    <div class="stat-label">সাফল্যের হার</div>
+                </div>
+            </div>
+            
+            <div class="results-details" id="resultsDetails">
+                <!-- Results details will be dynamically added here -->
+            </div>
+            
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" id="reviewBtn">উত্তর পর্যালোচনা</button>
+                <button class="btn btn-primary" id="restartBtn">আবার শুরু করুন</button>
+                <button class="btn btn-secondary" id="homeBtn">হোমপেজে ফিরুন</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>BanglaQuizMaster - এসএসসি পরীক্ষার্থীদের জন্য তৈরি</p>
+        <p>মোট ২,৮৭০টি MCQ সহ সম্পূর্ণ বিনামূল্যের অ্যাপ</p>
+        <p>© ২০২৩ - সকল অধিকার সংরক্ষিত</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
