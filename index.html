@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSCQuizMaster - এসএসসি পরীক্ষার প্রস্তুতি।</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3498db">
 </head>
 <body>
     <div class="container">
@@ -14,13 +16,52 @@
                 <h1>SSCQuizMaster</h1>
                 <p>এসএসসি পরীক্ষার জন্য সম্পূর্ণ প্রস্তুতি।</p>
             </div>
-            <button class="admin-login-btn" id="adminLoginBtn">এডমিন লগইন</button>
+            <div class="header-buttons">
+                <button class="home-btn" id="homeBtn">🏠 হোম</button>
+                <button class="admin-login-btn" id="adminLoginBtn">এডমিন</button>
+            </div>
         </header>
 
         <!-- Main Content Area -->
         <main class="main-content">
+            <!-- Home Screen -->
+            <section id="home-screen" class="screen active">
+                <!-- Welcome section removed as requested -->
+                
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <h3>বিভাগ</h3>
+                        <p>৩টি</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📖</div>
+                        <h3>বিষয়</h3>
+                        <p>১২টি</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❓</div>
+                        <h3>প্রশ্ন</h3>
+                        <p>১০০০+</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-card" id="startQuizBtn">
+                        <div class="action-icon">🚀</div>
+                        <h3>কুইজ শুরু করুন</h3>
+                        <p>এখনই পরীক্ষা দিন</p>
+                    </button>
+                    <button class="action-card" id="viewProgressBtn">
+                        <div class="action-icon">📊</div>
+                        <h3>প্রোগ্রেস দেখুন</h3>
+                        <p>আপনার উন্নতি ট্র্যাক করুন</p>
+                    </button>
+                </div>
+            </section>
+
             <!-- Department Selection Screen -->
-            <section id="department-selection" class="screen active">
+            <section id="department-selection" class="screen">
                 <h2>বিভাগ নির্বাচন করুন</h2>
                 <div class="department-grid">
                     <div class="department-card" data-department="science">
@@ -84,11 +125,11 @@
                         </div>
                     </div>
                     
-                    <div class="quiz-controls">
-                        <button id="prev-btn" class="control-btn">← আগের প্রশ্ন</button>
-                        <button id="skip-btn" class="control-btn">স্কিপ করুন</button>
-                        <button id="next-btn" class="control-btn">পরবর্তী প্রশ্ন →</button>
-                        <button id="submit-quiz" class="submit-btn">সাবমিট করুন</button>
+                    <div class="quiz-controls-mobile">
+                        <button id="prev-btn" class="control-btn-mobile">← আগের</button>
+                        <button id="skip-btn" class="control-btn-mobile">স্কিপ</button>
+                        <button id="next-btn" class="control-btn-mobile">পরবর্তী →</button>
+                        <button id="submit-quiz" class="submit-btn-mobile">সাবমিট</button>
                     </div>
                     
                     <div class="question-navigation">
@@ -101,7 +142,10 @@
             <section id="results-screen" class="screen">
                 <div class="results-header">
                     <h2>কুইজ ফলাফল</h2>
-                    <button class="back-btn" id="back-to-chapters-from-results">← নতুন কুইজ শুরু করুন</button>
+                    <div class="results-actions">
+                        <button class="back-btn" id="back-to-chapters-from-results">← নতুন কুইজ</button>
+                        <button class="home-btn" id="home-from-results">🏠 হোম</button>
+                    </div>
                 </div>
                 
                 <div class="results-summary">
@@ -139,7 +183,10 @@
             <section id="admin-panel" class="screen">
                 <div class="admin-header">
                     <h2>👨‍💻 এডমিন প্যানেল</h2>
-                    <button class="logout-btn" id="adminLogoutBtn">লগআউট</button>
+                    <div class="admin-actions">
+                        <button class="home-btn" id="home-from-admin">🏠 হোম</button>
+                        <button class="logout-btn" id="adminLogoutBtn">লগআউট</button>
+                    </div>
                 </div>
                 
                 <div class="admin-controls">
@@ -300,7 +347,7 @@
                             </div>
                         </div>
                         
-                        <div class="quick-actions">
+                        <div class="quick-actions-contact">
                             <button class="action-btn call-btn" onclick="callPhone('+8801308825783')">
                                 <span class="action-icon">📞</span>
                                 কল করুন
@@ -329,7 +376,6 @@
                 </div>
                 <button type="submit" class="submit-btn">লগইন</button>
             </form>
-            <!-- ❌ NO CREDENTIALS DISPLAYED -->
             <button class="close-admin-modal" id="closeAdminModal">✕</button>
         </div>
     </div>
@@ -397,6 +443,19 @@
         // Email function
         function sendEmail(emailAddress) {
             window.open(`mailto:${emailAddress}?subject=SSCQuizMaster সম্পর্কে যোগাযোগ&body=প্রিয় আমিনুর ইসলাম,%0D%0A%0D%0Aআমি আপনার SSCQuizMaster ওয়েবসাইটটি দেখেছি এবং...`);
+        }
+
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(error) {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
         }
     </script>
 </body>

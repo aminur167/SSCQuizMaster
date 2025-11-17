@@ -13,14 +13,15 @@ let isAdminLoggedIn = false;
 // Bengali option labels
 const optionLabels = ['ক', 'খ', 'গ', 'ঘ'];
 
-// 🔒 SECURE: Admin credentials only in code
+// 🔒 SECURE: Admin credentials - CHANGE THESE IN PRODUCTION
 const ADMIN_CREDENTIALS = {
-    username: "admin",
-    password: "admin123" // Change this in production
+    username: "SSCMaster2024",
+    password: "Admin@Secure#123!"
 };
 
 // DOM Elements
 const screens = {
+    home: document.getElementById('home-screen'),
     department: document.getElementById('department-selection'),
     subject: document.getElementById('subject-selection'),
     chapter: document.getElementById('chapter-selection'),
@@ -35,13 +36,23 @@ document.getElementById('back-to-subjects').addEventListener('click', () => show
 document.getElementById('back-to-chapters').addEventListener('click', () => showScreen('chapter'));
 document.getElementById('back-to-chapters-from-results').addEventListener('click', () => showScreen('chapter'));
 
+// Home navigation
+document.getElementById('homeBtn').addEventListener('click', () => showScreen('home'));
+document.getElementById('home-from-results').addEventListener('click', () => showScreen('home'));
+document.getElementById('home-from-admin').addEventListener('click', () => showScreen('home'));
+
+// Quick actions
+document.getElementById('startQuizBtn').addEventListener('click', () => showScreen('department'));
+document.getElementById('viewProgressBtn').addEventListener('click', () => {
+    alert('প্রোগ্রেস ট্র্যাকিং শীঘ্রই আসছে...');
+});
+
 // Admin DOM Elements
 const adminLoginBtn = document.getElementById('adminLoginBtn');
 const adminModal = document.getElementById('adminModal');
 const adminLoginForm = document.getElementById('adminLoginForm');
 const closeAdminModal = document.getElementById('closeAdminModal');
 const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-const adminPanel = document.getElementById('admin-panel');
 
 // Admin Event Listeners
 adminLoginBtn.addEventListener('click', showAdminLogin);
@@ -67,11 +78,21 @@ document.querySelectorAll('.admin-card').forEach(card => {
 
 // Initialize the app
 function initApp() {
-    showScreen('department');
+    showScreen('home');
     
     // Load questions from localStorage if available
     if (typeof questionManager !== 'undefined') {
         questionManager.loadFromLocalStorage();
+    }
+    
+    // Check if app is installed
+    checkIfAppInstalled();
+}
+
+// Check if app is installed
+function checkIfAppInstalled() {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('App is running in standalone mode');
     }
 }
 
@@ -92,6 +113,24 @@ function showScreen(screenName) {
         stopTimer();
         quizStarted = false;
     }
+    
+    // Update document title based on screen
+    updateDocumentTitle(screenName);
+}
+
+// Update document title based on current screen
+function updateDocumentTitle(screenName) {
+    const titles = {
+        'home': 'SSCQuizMaster - হোম',
+        'department': 'SSCQuizMaster - বিভাগ নির্বাচন',
+        'subject': 'SSCQuizMaster - বিষয় নির্বাচন',
+        'chapter': 'SSCQuizMaster - অধ্যায় নির্বাচন',
+        'quiz': 'SSCQuizMaster - কুইজ',
+        'results': 'SSCQuizMaster - ফলাফল',
+        'admin': 'SSCQuizMaster - এডমিন প্যানেল'
+    };
+    
+    document.title = titles[screenName] || 'SSCQuizMaster';
 }
 
 // Department selection
@@ -578,6 +617,8 @@ function showAdminLogin() {
 // Hide admin login modal
 function hideAdminLogin() {
     adminModal.style.display = 'none';
+    // Clear form and hide any error messages
+    document.getElementById('adminLoginForm').reset();
 }
 
 // 🔒 SECURE: Handle admin login with generic error messages
@@ -587,27 +628,52 @@ function handleAdminLogin(e) {
     const username = document.getElementById('adminUsername').value;
     const password = document.getElementById('adminPassword').value;
     
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    // Simple encryption for comparison (not for production)
+    const encryptedUsername = btoa(username);
+    const encryptedPassword = btoa(password);
+    
+    const storedUsername = btoa(ADMIN_CREDENTIALS.username);
+    const storedPassword = btoa(ADMIN_CREDENTIALS.password);
+    
+    if (encryptedUsername === storedUsername && encryptedPassword === storedPassword) {
         isAdminLoggedIn = true;
         adminModal.style.display = 'none';
         showScreen('admin-panel');
         
         // Clear form
         document.getElementById('adminLoginForm').reset();
+        
+        // Log admin access
+        console.log('Admin login successful at: ' + new Date().toLocaleString());
     } else {
         // 🔒 Generic error message - no hints
         alert('ইনভ্যালিড ক্রেডেনশিয়াল। আবার চেষ্টা করুন।');
+        
+        // Log failed attempt
+        console.log('Failed admin login attempt at: ' + new Date().toLocaleString());
     }
 }
 
 // Handle admin logout
 function handleAdminLogout() {
     isAdminLoggedIn = false;
-    showScreen('department-selection');
+    showScreen('home');
+    
+    // Clear any admin data from memory
+    currentDepartment = null;
+    currentSubject = null;
+    currentChapter = null;
+    
+    console.log('Admin logout at: ' + new Date().toLocaleString());
 }
 
 // Handle admin actions
 function handleAdminAction(action) {
+    if (!isAdminLoggedIn) {
+        showAdminLogin();
+        return;
+    }
+    
     switch(action) {
         case 'add-question':
             showAddQuestionForm();
@@ -694,6 +760,12 @@ function populateChapters(subjectId) {
 function handleAddQuestion(e) {
     e.preventDefault();
     
+    if (!isAdminLoggedIn) {
+        alert('অনুগ্রহ করে আবার লগইন করুন।');
+        showAdminLogin();
+        return;
+    }
+    
     const subject = document.getElementById('questionSubject').value;
     const chapter = document.getElementById('questionChapter').value;
     const questionText = document.getElementById('questionText').value;
@@ -703,18 +775,33 @@ function handleAddQuestion(e) {
     const option4 = document.getElementById('option4').value;
     const correctAnswer = parseInt(document.getElementById('correctAnswer').value);
     
+    // Validate inputs
+    if (!subject || !chapter || !questionText || !option1 || !option2 || !option3 || !option4) {
+        alert('সমস্ত ফিল্ড পূরণ করুন।');
+        return;
+    }
+    
     const newQuestion = {
         id: Date.now(), // Unique ID
         question: questionText,
         options: [option1, option2, option3, option4],
-        correctAnswer: correctAnswer
+        correctAnswer: correctAnswer,
+        created: new Date().toISOString(),
+        createdBy: 'admin'
     };
     
     // Add question using question manager
     if (typeof questionManager !== 'undefined') {
-        questionManager.addQuestion(subject, chapter, newQuestion);
-        alert('প্রশ্ন সফলভাবে যোগ করা হয়েছে!');
-        hideAddQuestionForm();
+        const success = questionManager.addQuestion(subject, chapter, newQuestion);
+        if (success) {
+            alert('প্রশ্ন সফলভাবে যোগ করা হয়েছে!');
+            hideAddQuestionForm();
+            
+            // Log question addition
+            console.log(`New question added to ${subject} > ${chapter} at: ${new Date().toLocaleString()}`);
+        } else {
+            alert('প্রশ্ন যোগ করতে সমস্যা হয়েছে।');
+        }
     } else {
         alert('ত্রুটি: প্রশ্ন ম্যানেজার লোড হয়নি!');
     }
@@ -724,7 +811,7 @@ function handleAddQuestion(e) {
 function showStatistics() {
     if (typeof questionManager !== 'undefined') {
         const stats = questionManager.getStatistics();
-        alert(`স্ট্যাটিস্টিক্স:\nমোট প্রশ্ন: ${stats.totalQuestions}\nবিষয়: ${stats.subjectsCount}\nঅধ্যায়: ${stats.chaptersCount}\nসর্বশেষ আপডেট: ${stats.lastUpdated}`);
+        alert(`স্ট্যাটিস্টিক্স:\n\nমোট প্রশ্ন: ${stats.totalQuestions}\nবিষয়: ${stats.subjectsCount}\nঅধ্যায়: ${stats.chaptersCount}\nসর্বশেষ আপডেট: ${stats.lastUpdated}`);
     } else {
         alert('ত্রুটি: প্রশ্ন ম্যানেজার লোড হয়নি!');
     }
@@ -740,11 +827,14 @@ function backupData() {
         const url = URL.createObjectURL(dataBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'ssc_quizmaster_backup.json';
+        a.download = `ssc_quizmaster_backup_${new Date().toISOString().split('T')[0]}.json`;
         a.click();
         
         URL.revokeObjectURL(url);
         alert('ডাটা ব্যাকআপ সফলভাবে ডাউনলোড হয়েছে!');
+        
+        // Log backup
+        console.log(`Data backup created at: ${new Date().toLocaleString()}`);
     } else {
         alert('ত্রুটি: প্রশ্ন ম্যানেজার লোড হয়নি!');
     }
