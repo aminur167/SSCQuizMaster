@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSCQuizMaster - এসএসসি পরীক্ষার প্রস্তুতি।</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>SSCQuizMaster</h1>
+                <p>এসএসসি পরীক্ষার জন্য সম্পূর্ণ প্রস্তুতি।</p>
+            </div>
+            <button class="admin-login-btn" id="adminLoginBtn">এডমিন লগইন</button>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Department Selection Screen -->
+            <section id="department-selection" class="screen active">
+                <h2>বিভাগ নির্বাচন করুন</h2>
+                <div class="department-grid">
+                    <div class="department-card" data-department="science">
+                        <div class="department-icon">🔬</div>
+                        <h3>বিজ্ঞান বিভাগ</h3>
+                        <p>পদার্থ, রসায়ন, জীববিজ্ঞান, গণিত।</p>
+                    </div>
+                    <div class="department-card" data-department="arts">
+                        <div class="department-icon">🎓</div>
+                        <h3>মানবিক বিভাগ</h3>
+                        <p>ইতিহাস, ভূগোল, বিজ্ঞান, পৌরনীতি।</p>
+                    </div>
+                    <div class="department-card" data-department="general">
+                        <div class="department-icon">📝</div>
+                        <h3>সাধারণ বিভাগ</h3>
+                        <p>বাংলা, কৃষি, আইসিটি, ইসলাম।</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Subject Selection Screen -->
+            <section id="subject-selection" class="screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="back-to-departments">← বিভাগে ফিরে যান</button>
+                    <h2 id="department-title"></h2>
+                </div>
+                <div class="subject-grid" id="subject-list">
+                    <!-- Subjects will be dynamically loaded here -->
+                </div>
+            </section>
+
+            <!-- Chapter Selection Screen -->
+            <section id="chapter-selection" class="screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="back-to-subjects">← সাবজেক্টে ফিরে যান</button>
+                    <h2 id="subject-title"></h2>
+                </div>
+                <div class="chapter-grid" id="chapter-list">
+                    <!-- Chapters will be dynamically loaded here -->
+                </div>
+            </section>
+
+            <!-- Quiz Screen -->
+            <section id="quiz-screen" class="screen">
+                <div class="quiz-header">
+                    <button class="back-btn" id="back-to-chapters">← চ্যাপ্টারে ফিরে যান</button>
+                    <div class="quiz-info">
+                        <h3 id="quiz-title"></h3>
+                        <div class="quiz-meta">
+                            <span id="quiz-timer">08:00</span>
+                            <span id="quiz-progress">প্রশ্ন ১/২০</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-container">
+                    <div class="question-container">
+                        <div class="question-text" id="question-text"></div>
+                        <div class="options-container" id="options-container">
+                            <!-- Options will be dynamically loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-controls">
+                        <button id="prev-btn" class="control-btn">← আগের প্রশ্ন</button>
+                        <button id="skip-btn" class="control-btn">স্কিপ করুন</button>
+                        <button id="next-btn" class="control-btn">পরবর্তী প্রশ্ন →</button>
+                        <button id="submit-quiz" class="submit-btn">সাবমিট করুন</button>
+                    </div>
+                    
+                    <div class="question-navigation">
+                        <!-- Question navigation dots will be dynamically loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Screen -->
+            <section id="results-screen" class="screen">
+                <div class="results-header">
+                    <h2>কুইজ ফলাফল</h2>
+                    <button class="back-btn" id="back-to-chapters-from-results">← নতুন কুইজ শুরু করুন</button>
+                </div>
+                
+                <div class="results-summary">
+                    <div class="result-card">
+                        <div class="result-icon">🏆</div>
+                        <h3 id="total-score">0</h3>
+                        <p>মোট মার্কস</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">✅</div>
+                        <h3 id="correct-answers">0</h3>
+                        <p>সঠিক উত্তর</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">❌</div>
+                        <h3 id="wrong-answers">0</h3>
+                        <p>ভুল উত্তর</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-icon">📊</div>
+                        <h3 id="user-rank">0</h3>
+                        <p>আপনার র‍্যাংক</p>
+                    </div>
+                </div>
+                
+                <div class="detailed-results">
+                    <h3>প্রতিটি প্রশ্নের ফলাফল</h3>
+                    <div id="question-results">
+                        <!-- Question results will be dynamically loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Panel Screen -->
+            <section id="admin-panel" class="screen">
+                <div class="admin-header">
+                    <h2>👨‍💻 এডমিন প্যানেল</h2>
+                    <button class="logout-btn" id="adminLogoutBtn">লগআউট</button>
+                </div>
+                
+                <div class="admin-controls">
+                    <div class="admin-card" data-action="add-question">
+                        <div class="admin-icon">➕</div>
+                        <h3>প্রশ্ন যোগ করুন</h3>
+                        <p>নতুন প্রশ্ন তৈরি করুন</p>
+                    </div>
+                    
+                    <div class="admin-card" data-action="edit-question">
+                        <div class="admin-icon">✏️</div>
+                        <h3>প্রশ্ন এডিট করুন</h3>
+                        <p>বিদ্যমান প্রশ্ন পরিবর্তন করুন</p>
+                    </div>
+                    
+                    <div class="admin-card" data-action="view-stats">
+                        <div class="admin-icon">📊</div>
+                        <h3>স্ট্যাটিস্টিক্স</h3>
+                        <p>কুইজ পারফরমেন্স দেখুন</p>
+                    </div>
+                    
+                    <div class="admin-card" data-action="backup-data">
+                        <div class="admin-icon">💾</div>
+                        <h3>ডাটা ব্যাকআপ</h3>
+                        <p>ডাটা এক্সপোর্ট/ইম্পোর্ট করুন</p>
+                    </div>
+                </div>
+
+                <!-- Add Question Form -->
+                <div class="admin-form-container" id="addQuestionForm" style="display: none;">
+                    <h3>➕ নতুন প্রশ্ন যোগ করুন</h3>
+                    <form id="questionForm">
+                        <div class="form-group">
+                            <label>বিষয়:</label>
+                            <select id="questionSubject" required>
+                                <option value="">বিষয় নির্বাচন করুন</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>অধ্যায়:</label>
+                            <select id="questionChapter" required>
+                                <option value="">অধ্যায় নির্বাচন করুন</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>প্রশ্ন:</label>
+                            <textarea id="questionText" placeholder="প্রশ্ন লিখুন..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>বিকল্পসমূহ:</label>
+                            <input type="text" id="option1" placeholder="বিকল্প ১" required>
+                            <input type="text" id="option2" placeholder="বিকল্প ২" required>
+                            <input type="text" id="option3" placeholder="বিকল্প ৩" required>
+                            <input type="text" id="option4" placeholder="বিকল্প ৪" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>সঠিক উত্তর:</label>
+                            <select id="correctAnswer" required>
+                                <option value="0">বিকল্প ১</option>
+                                <option value="1">বিকল্প ২</option>
+                                <option value="2">বিকল্প ৩</option>
+                                <option value="3">বিকল্প ৪</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">প্রশ্ন সংরক্ষণ করুন</button>
+                            <button type="button" class="cancel-btn" id="cancelAddQuestion">বাতিল করুন</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <!-- Contact & Developer Section -->
+        <footer class="contact-developer-section">
+            <!-- Contact Button -->
+            <div class="contact-toggle-container">
+                <button class="contact-toggle-btn" id="contactToggle">
+                    <span class="contact-icon">📞</span>
+                    যোগাযোগ করুন
+                    <span class="toggle-arrow">▼</span>
+                </button>
+            </div>
+
+            <!-- Developer Info (Always Visible) -->
+            <div class="developer-info">
+                <div class="developer-container">
+                    <div class="developer-header">
+                        <h3>🚀 Developed by Aminur 🚀</h3>
+                        <p>✨ Professional Full Stack Web Developer ✨</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Details (Hidden by default) -->
+            <div class="contact-details" id="contactDetails">
+                <div class="contact-container">
+                    <div class="contact-header">
+                        <h3>📞 যোগাযোগের তথ্য</h3>
+                        <button class="close-contact" id="closeContact">✕</button>
+                    </div>
+                    
+                    <div class="contact-content">
+                        <div class="contact-info-grid">
+                            <div class="contact-item">
+                                <div class="contact-icon">👨‍💻</div>
+                                <div class="contact-text">
+                                    <strong>ডেভেলপার:</strong>
+                                    <span>মোঃ আমিনুর ইসলাম</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">🎓</div>
+                                <div class="contact-text">
+                                    <strong>শিক্ষার্থী:</strong>
+                                    <span>কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং (CSE)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">🏫</div>
+                                <div class="contact-text">
+                                    <strong>বিশ্ববিদ্যালয়:</strong>
+                                    <span>হাজী মোহাম্মদ দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">📍</div>
+                                <div class="contact-text">
+                                    <strong>ঠিকানা:</strong>
+                                    <span>বড়িয়া, জিয়ানগর, দুপচাঁচিয়া, বগুড়া।</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item clickable" onclick="callPhone('+8801308825783')">
+                                <div class="contact-icon">📱</div>
+                                <div class="contact-text">
+                                    <strong>মোবাইল:</strong>
+                                    <span class="contact-link">+8801308825783</span>
+                                </div>
+                                <div class="action-arrow">📞</div>
+                            </div>
+                            
+                            <div class="contact-item clickable" onclick="sendEmail('aminurhstu23@gmail.com')">
+                                <div class="contact-icon">📧</div>
+                                <div class="contact-text">
+                                    <strong>ইমেইল:</strong>
+                                    <span class="contact-link">aminurhstu23@gmail.com</span>
+                                </div>
+                                <div class="action-arrow">✉️</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button class="action-btn call-btn" onclick="callPhone('+8801308825783')">
+                                <span class="action-icon">📞</span>
+                                কল করুন
+                            </button>
+                            <button class="action-btn email-btn" onclick="sendEmail('aminurhstu23@gmail.com')">
+                                <span class="action-icon">📧</span>
+                                ইমেইল করুন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-modal-content">
+            <h3>🔐 এডমিন লগইন</h3>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <input type="text" placeholder="ইউজারনেম" id="adminUsername" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="পাসওয়ার্ড" id="adminPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">লগইন</button>
+            </form>
+            <!-- ❌ NO CREDENTIALS DISPLAYED -->
+            <button class="close-admin-modal" id="closeAdminModal">✕</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data/subjects.js"></script>
+    <script src="js/data/science/physicsQuestions.js"></script>
+    <script src="js/data/science/chemistryQuestions.js"></script>
+    <script src="js/data/science/biologyQuestions.js"></script>
+    <script src="js/data/science/mathQuestions.js"></script>
+    <script src="js/data/arts/historyQuestions.js"></script>
+    <script src="js/data/arts/geographyQuestions.js"></script>
+    <script src="js/data/arts/scienceQuestions.js"></script>
+    <script src="js/data/arts/civicsQuestions.js"></script>
+    <script src="js/data/general/banglaQuestions.js"></script>
+    <script src="js/data/general/agricultureQuestions.js"></script>
+    <script src="js/data/general/ictQuestions.js"></script>
+    <script src="js/data/general/islamQuestions.js"></script>
+    
+    <script src="js/admin.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Contact System JavaScript
+        const contactToggle = document.getElementById('contactToggle');
+        const contactDetails = document.getElementById('contactDetails');
+        const closeContact = document.getElementById('closeContact');
+        let isContactOpen = false;
+
+        // Toggle contact details
+        contactToggle.addEventListener('click', function() {
+            isContactOpen = !isContactOpen;
+            if (isContactOpen) {
+                contactDetails.style.display = 'block';
+                contactToggle.classList.add('active');
+                setTimeout(() => {
+                    contactDetails.classList.add('show');
+                }, 10);
+            } else {
+                contactDetails.classList.remove('show');
+                contactToggle.classList.remove('active');
+                setTimeout(() => {
+                    contactDetails.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Close contact details
+        closeContact.addEventListener('click', function() {
+            contactDetails.classList.remove('show');
+            contactToggle.classList.remove('active');
+            setTimeout(() => {
+                contactDetails.style.display = 'none';
+                isContactOpen = false;
+            }, 300);
+        });
+
+        // Phone call function
+        function callPhone(phoneNumber) {
+            if (confirm(`আপনি কি ${phoneNumber} নম্বরে কল করতে চান?`)) {
+                window.open(`tel:${phoneNumber}`);
+            }
+        }
+
+        // Email function
+        function sendEmail(emailAddress) {
+            window.open(`mailto:${emailAddress}?subject=SSCQuizMaster সম্পর্কে যোগাযোগ&body=প্রিয় আমিনুর ইসলাম,%0D%0A%0D%0Aআমি আপনার SSCQuizMaster ওয়েবসাইটটি দেখেছি এবং...`);
+        }
+    </script>
+</body>
+</html>
