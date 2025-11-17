@@ -10,6 +10,14 @@ let timeLeft = 480; // 8 minutes in seconds
 let quizStarted = false;
 let isAdminLoggedIn = false;
 
+// PWA Install Variables
+let deferredPrompt;
+let installPrompt;
+let installBtn;
+let closeInstallBtn;
+let installHelp;
+let closeInstallHelp;
+
 // Bengali option labels
 const optionLabels = ['ক', 'খ', 'গ', 'ঘ'];
 
@@ -76,9 +84,180 @@ document.querySelectorAll('.admin-card').forEach(card => {
     });
 });
 
+// ==================== PWA INSTALL LOGIC ====================
+
+// Initialize PWA Install System
+function initPWAInstall() {
+    installPrompt = document.getElementById('installPrompt');
+    installBtn = document.getElementById('installBtn');
+    closeInstallBtn = document.getElementById('closeInstallBtn');
+    installHelp = document.getElementById('installHelp');
+    closeInstallHelp = document.getElementById('closeInstallHelp');
+
+    // Show install prompt when app can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        console.log('PWA: App can be installed');
+        
+        // Show install prompt after 8 seconds
+        setTimeout(() => {
+            if (!isAppInstalled()) {
+                showInstallPrompt();
+            }
+        }, 8000);
+    });
+
+    // Install button click
+    if (installBtn) {
+        installBtn.addEventListener('click', handleInstallClick);
+    }
+
+    // Close install prompt
+    if (closeInstallBtn) {
+        closeInstallBtn.addEventListener('click', hideInstallPrompt);
+    }
+
+    // Close install help
+    if (closeInstallHelp) {
+        closeInstallHelp.addEventListener('click', hideInstallHelp);
+    }
+
+    // Check if app is already installed
+    checkIfAppInstalled();
+
+    // Add install help button to footer
+    addInstallHelpButton();
+}
+
+// Handle install button click
+async function handleInstallClick() {
+    if (!deferredPrompt) {
+        // If install prompt not available, show manual instructions
+        showInstallHelp();
+        return;
+    }
+    
+    try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+            console.log('PWA: User installed the app');
+            hideInstallPrompt();
+            showInstallSuccess();
+        } else {
+            console.log('PWA: User dismissed the install prompt');
+        }
+        
+        deferredPrompt = null;
+    } catch (error) {
+        console.error('PWA: Install error', error);
+        showInstallHelp();
+    }
+}
+
+// Show install prompt
+function showInstallPrompt() {
+    if (installPrompt && !isAppInstalled()) {
+        installPrompt.style.display = 'block';
+        console.log('PWA: Showing install prompt');
+    }
+}
+
+// Hide install prompt
+function hideInstallPrompt() {
+    if (installPrompt) {
+        installPrompt.style.display = 'none';
+    }
+}
+
+// Show install help instructions
+function showInstallHelp() {
+    if (installHelp) {
+        installHelp.style.display = 'block';
+        hideInstallPrompt();
+    }
+}
+
+// Hide install help
+function hideInstallHelp() {
+    if (installHelp) {
+        installHelp.style.display = 'none';
+    }
+}
+
+// Show install success message
+function showInstallSuccess() {
+    alert('🎉 অ্যাপটি সফলভাবে ইন্সটল হয়েছে! এখন আপনি Home Screen থেকে এক্সেস করতে পারবেন।');
+}
+
+// Check if app is already installed
+function isAppInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true;
+}
+
+// Check if app is running in standalone mode
+function checkIfAppInstalled() {
+    if (isAppInstalled()) {
+        console.log('PWA: App is running in standalone mode');
+        document.body.classList.add('standalone');
+        hideInstallPrompt();
+    }
+}
+
+// Add install help button to footer
+function addInstallHelpButton() {
+    setTimeout(() => {
+        const developerInfo = document.querySelector('.developer-info');
+        if (developerInfo && !document.querySelector('.install-help-btn')) {
+            const installHelpBtn = document.createElement('button');
+            installHelpBtn.className = 'install-help-btn';
+            installHelpBtn.innerHTML = '📱 অ্যাপ ইন্সটল করুন';
+            installHelpBtn.onclick = showInstallHelp;
+            developerInfo.appendChild(installHelpBtn);
+        }
+    }, 3000);
+}
+
+// Show manual install instructions
+function showManualInstallInstructions() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    let message = '';
+    
+    if (isIOS) {
+        message = `iPhone-এ অ্যাপ ইন্সটল করতে:
+1. Safari browser-এ এই পেজটি ওপেন করুন
+2. নিচের দিকে Share button (⎙) ট্যাপ করুন
+3. "Add to Home Screen" সিলেক্ট করুন
+4. "Add" বাটন ট্যাপ করুন`;
+    } else if (isAndroid) {
+        message = `Android-এ অ্যাপ ইন্সটল করতে:
+1. Chrome browser-এ এই পেজটি ওপেন করুন
+2.右上角三点菜单 (⋮) ট্যাপ করুন
+3. "Add to Home Screen" সিলেক্ট করুন
+4. "Add" বাটন ট্যাপ করুন`;
+    } else {
+        message = `আপনার ডিভাইসে অ্যাপ ইন্সটল করতে:
+- Mobile browser-এর menu-তে "Add to Home Screen" option খুঁজুন
+- অথবা browser-এর settings-এ PWA install option দেখুন`;
+    }
+    
+    alert(message);
+}
+
+// ==================== APP INITIALIZATION ====================
+
 // Initialize the app
 function initApp() {
     showScreen('home');
+    
+    // Initialize PWA Install System
+    initPWAInstall();
     
     // Load questions from localStorage if available
     if (typeof questionManager !== 'undefined') {
@@ -87,12 +266,21 @@ function initApp() {
     
     // Check if app is installed
     checkIfAppInstalled();
+
+    // Show welcome message for first time users
+    showWelcomeMessage();
 }
 
-// Check if app is installed
-function checkIfAppInstalled() {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('App is running in standalone mode');
+// Show welcome message
+function showWelcomeMessage() {
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    if (!hasSeenWelcome) {
+        setTimeout(() => {
+            if (confirm('🎉 SSCQuizMaster-এ স্বাগতম! অ্যাপটি Home Screen-এ যোগ করে দ্রুত এক্সেস পেতে চান?')) {
+                showInstallHelp();
+            }
+            localStorage.setItem('hasSeenWelcome', 'true');
+        }, 2000);
     }
 }
 

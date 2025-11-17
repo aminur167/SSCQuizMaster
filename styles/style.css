@@ -1393,3 +1393,308 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* ==================== PWA INSTALL PROMPT STYLES ==================== */
+
+/* Install Prompt */
+.install-prompt {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    display: none;
+    animation: slideInUp 0.3s ease;
+    max-width: 300px;
+    border-left: 4px solid #3498db;
+}
+
+.install-prompt-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+.install-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.install-text h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.install-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.install-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.install-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.install-btn:hover {
+    background: #219653;
+    transform: translateY(-1px);
+}
+
+.close-install-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.close-install-btn:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* Install Help Instructions */
+.install-help {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.install-help-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: scaleIn 0.3s ease;
+}
+
+.install-help-content h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.install-steps {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.step {
+    background: #f8f9fa;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.step strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.close-help-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.close-help-btn:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+/* Install Help Button in Footer */
+.install-help-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.install-help-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+}
+
+/* Standalone mode styles */
+body.standalone {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Responsive Design for Install Prompt */
+@media (max-width: 768px) {
+    .install-prompt {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .install-help-content {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-prompt {
+        padding: 12px;
+    }
+    
+    .install-text h4 {
+        font-size: 1rem;
+    }
+    
+    .install-text p {
+        font-size: 0.8rem;
+    }
+    
+    .install-buttons {
+        flex-direction: column;
+    }
+    
+    .step {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .install-help-content {
+        background: #2c3e50;
+        color: white;
+    }
+    
+    .step {
+        background: #34495e;
+        color: white;
+    }
+    
+    .step strong {
+        color: #ecf0f1;
+    }
+}
+
+/* PWA Badge for Install Button */
+.install-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+/* Enhanced animations for better UX */
+.install-prompt.show {
+    display: block !important;
+}
+
+.install-help.show {
+    display: flex !important;
+}
+
+.install-prompt.hide {
+    animation: slideOutDown 0.3s ease forwards;
+}
+
+/* Safe area support for notched devices */
+@supports (padding: max(0px)) {
+    .install-prompt {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        right: max(20px, env(safe-area-inset-right));
+    }
+}
