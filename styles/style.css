@@ -2052,3 +2052,12 @@ body.standalone {
 .developer-header h3 {
     animation: float 3s ease-in-out infinite;
 }
+/* Floating animation for developer section */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-2px); }
+}
+
+.developer-header h3 {
+    animation: float 3s ease-in-out infinite;
+}
