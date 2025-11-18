@@ -443,13 +443,14 @@
     <script src="js/main.js"></script>
 
     <script>
-        // Contact System JavaScript
-        const contactToggle = document.getElementById('contactToggle');
-        const contactDetails = document.getElementById('contactDetails');
-        const closeContact = document.getElementById('closeContact');
-        let isContactOpen = false;
+    // Enhanced Contact System JavaScript
+    const contactToggle = document.getElementById('contactToggle');
+    const contactDetails = document.getElementById('contactDetails');
+    const closeContact = document.getElementById('closeContact');
+    let isContactOpen = false;
 
-        // Toggle contact details
+    // Toggle contact details with enhanced animation
+    if (contactToggle && contactDetails) {
         contactToggle.addEventListener('click', function() {
             isContactOpen = !isContactOpen;
             if (isContactOpen) {
@@ -463,143 +464,279 @@
                 contactToggle.classList.remove('active');
                 setTimeout(() => {
                     contactDetails.style.display = 'none';
-                }, 300);
+                }, 400);
             }
         });
 
         // Close contact details
-        closeContact.addEventListener('click', function() {
-            contactDetails.classList.remove('show');
-            contactToggle.classList.remove('active');
-            setTimeout(() => {
-                contactDetails.style.display = 'none';
-                isContactOpen = false;
-            }, 300);
-        });
+        if (closeContact) {
+            closeContact.addEventListener('click', function() {
+                contactDetails.classList.remove('show');
+                contactToggle.classList.remove('active');
+                setTimeout(() => {
+                    contactDetails.style.display = 'none';
+                    isContactOpen = false;
+                }, 400);
+            });
+        }
+    }
 
-        // Phone call function
-        function callPhone(phoneNumber) {
-            if (confirm(`আপনি কি ${phoneNumber} নম্বরে কল করতে চান?`)) {
-                window.open(`tel:${phoneNumber}`);
+    // Enhanced phone call function
+    function callPhone(phoneNumber) {
+        const userConfirmed = confirm(`আপনি কি ${phoneNumber} নম্বরে কল করতে চান?`);
+        if (userConfirmed) {
+            window.open(`tel:${phoneNumber}`);
+            // Log the action
+            console.log(`Call initiated to: ${phoneNumber} at ${new Date().toLocaleString()}`);
+        }
+    }
+
+    // Enhanced email function
+    function sendEmail(emailAddress) {
+        const subject = encodeURIComponent('SSCQuizMaster সম্পর্কে যোগাযোগ');
+        const body = encodeURIComponent(`প্রিয় আমিনুর ইসলাম,\n\nআমি আপনার SSCQuizMaster ওয়েবসাইটটি দেখেছি এবং খুবই impressed হয়েছি। আমি নিচের বিষয়ে আপনার সাথে যোগাযোগ করতে চাই:\n\n- [আপনার বার্তা এখানে লিখুন]\n\n\nআপনার সাড়ার অপেক্ষায় রইলাম।\n\nশুভেচ্ছান্তে,\n[আপনার নাম]`);
+        window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
+        
+        // Log the action
+        console.log(`Email initiated to: ${emailAddress} at ${new Date().toLocaleString()}`);
+    }
+
+    // Enhanced Install Prompt Logic
+    let deferredPrompt;
+    const installPrompt = document.getElementById('installPrompt');
+    const installBtn = document.getElementById('installBtn');
+    const closeInstallBtn = document.getElementById('closeInstallBtn');
+    const installHelp = document.getElementById('installHelp');
+    const closeInstallHelp = document.getElementById('closeInstallHelp');
+
+    // Show install prompt when app can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        console.log('PWA: BeforeInstallPrompt event fired - App can be installed');
+        
+        // Show install prompt after 3 seconds
+        setTimeout(() => {
+            if (!isAppInstalled()) {
+                showInstallPrompt();
             }
-        }
+        }, 3000);
+    });
 
-        // Email function
-        function sendEmail(emailAddress) {
-            window.open(`mailto:${emailAddress}?subject=SSCQuizMaster সম্পর্কে যোগাযোগ&body=প্রিয় আমিনুর ইসলাম,%0D%0A%0D%0Aআমি আপনার SSCQuizMaster ওয়েবসাইটটি দেখেছি এবং...`);
-        }
-
-        // Install Prompt Logic
-        let deferredPrompt;
-        const installPrompt = document.getElementById('installPrompt');
-        const installBtn = document.getElementById('installBtn');
-        const closeInstallBtn = document.getElementById('closeInstallBtn');
-        const installHelp = document.getElementById('installHelp');
-        const closeInstallHelp = document.getElementById('closeInstallHelp');
-
-        // Show install prompt when app can be installed
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show install prompt after 5 seconds
-            setTimeout(() => {
-                installPrompt.style.display = 'block';
-            }, 5000);
-        });
-
-        // Install button click
+    // Install button click handler
+    if (installBtn) {
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
-                // If install prompt not available, show manual instructions
-                installHelp.style.display = 'block';
+                showInstallHelp();
                 return;
             }
             
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                console.log('User installed the app');
-                installPrompt.style.display = 'none';
+            try {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('PWA: User accepted the install prompt');
+                    hideInstallPrompt();
+                    showInstallSuccess();
+                } else {
+                    console.log('PWA: User dismissed the install prompt');
+                    setTimeout(() => {
+                        showInstallHelp();
+                    }, 1000);
+                }
+                
+                deferredPrompt = null;
+            } catch (error) {
+                console.error('PWA: Install error', error);
+                showInstallHelp();
             }
-            
-            deferredPrompt = null;
         });
+    }
 
-        // Close install prompt
+    // Close install prompt
+    if (closeInstallBtn) {
         closeInstallBtn.addEventListener('click', () => {
-            installPrompt.style.display = 'none';
+            hideInstallPrompt();
         });
+    }
 
-        // Close install help
+    // Close install help
+    if (closeInstallHelp) {
         closeInstallHelp.addEventListener('click', () => {
-            installHelp.style.display = 'none';
+            hideInstallHelp();
         });
+    }
 
-        // Manual install help button (you can add this anywhere in your app)
-        function showInstallHelp() {
-            installHelp.style.display = 'block';
+    // Manual install help button
+    function showInstallHelp() {
+        if (installHelp) {
+            installHelp.style.display = 'flex';
+            installHelp.classList.add('show');
+            hideInstallPrompt();
+            updateInstallInstructions();
         }
+    }
 
-        // PWA Service Worker Registration - UPDATED
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                        
-                        // Check for updates
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            console.log('New service worker found!');
-                            
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('New content is available; please refresh.');
-                                    // Show update notification
-                                    if (confirm('নতুন আপডেট পাওয়া গেছে! রিফ্রেশ করবেন?')) {
-                                        window.location.reload();
-                                    }
-                                }
-                            });
-                        });
-                    })
-                    .catch(function(error) {
-                        console.log('ServiceWorker registration failed: ', error);
-                    });
-            });
-
-            // Listen for controller change (when new SW takes control)
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                console.log('Controller changed - page should be refreshed');
-                window.location.reload();
-            });
+    // Show install prompt
+    function showInstallPrompt() {
+        if (installPrompt && !isAppInstalled()) {
+            installPrompt.style.display = 'block';
+            installPrompt.classList.add('show');
+            
+            // Auto hide after 30 seconds
+            setTimeout(() => {
+                if (installPrompt.style.display === 'block') {
+                    hideInstallPrompt();
+                }
+            }, 30000);
         }
+    }
 
-        // Detect if app is running in standalone mode
-        function checkDisplayMode() {
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                console.log('App is running in standalone mode');
-                document.body.classList.add('standalone');
-                // Hide install prompt if app is already installed
+    // Hide install prompt
+    function hideInstallPrompt() {
+        if (installPrompt) {
+            installPrompt.classList.remove('show');
+            installPrompt.classList.add('hide');
+            setTimeout(() => {
                 installPrompt.style.display = 'none';
-            }
+                installPrompt.classList.remove('hide');
+            }, 300);
         }
+    }
 
-        // Run display mode check
-        checkDisplayMode();
+    // Hide install help
+    function hideInstallHelp() {
+        if (installHelp) {
+            installHelp.style.display = 'none';
+            installHelp.classList.remove('show');
+        }
+    }
 
-        // Add install help button to footer (optional)
+    // Check if app is installed
+    function isAppInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches || 
+               window.navigator.standalone === true;
+    }
+
+    // Show install success
+    function showInstallSuccess() {
+        const successMessage = document.createElement('div');
+        successMessage.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 10002;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: scaleIn 0.4s ease;
+            border: 2px solid #2ecc71;
+            max-width: 300px;
+            width: 90%;
+        `;
+        successMessage.innerHTML = `
+            <div style="font-size: 3rem; margin-bottom: 15px;">🎉</div>
+            <h3 style="margin: 0 0 12px 0; font-size: 1.3rem; font-weight: bold;">সফলভাবে ইন্সটল হয়েছে!</h3>
+            <p style="margin: 0; font-size: 0.95rem; line-height: 1.4;">অ্যাপটি আপনার Home Screen-এ যোগ করা হয়েছে। এখন থেকে দ্রুত এক্সেস করতে পারবেন!</p>
+        `;
+        
+        document.body.appendChild(successMessage);
+        
         setTimeout(() => {
-            const developerInfo = document.querySelector('.developer-info');
+            successMessage.style.animation = 'scaleIn 0.3s ease reverse forwards';
+            setTimeout(() => {
+                successMessage.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    // Update install instructions based on device
+    function updateInstallInstructions() {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+        
+        const androidStep = document.querySelector('.step:nth-child(1)');
+        const iosStep = document.querySelector('.step:nth-child(2)');
+        
+        if (isAndroid && androidStep) {
+            androidStep.innerHTML = `
+                <strong>Android-এ ইন্সটল করুন:</strong><br>
+                1. Chrome-এ ⋮ তিন ডট মেনু ট্যাপ করুন<br>
+                2. "Home screen-এ যোগ করুন" সিলেক্ট করুন<br>
+                3. "যোগ করুন" বাটন ট্যাপ করুন<br>
+                4. Home screen থেকে অ্যাপ এক্সেস করুন
+            `;
+            androidStep.style.display = 'block';
+            if (iosStep) iosStep.style.display = 'none';
+        } else if (isIOS && iosStep) {
+            iosStep.innerHTML = `
+                <strong>iPhone-এ ইন্সটল করুন:</strong><br>
+                1. Safari-তে ⎙ Share বাটন ট্যাপ করুন<br>
+                2. "Home Screen-এ যোগ করুন" ট্যাপ করুন<br>
+                3. "যোগ করুন" বাটন ট্যাপ করুন<br>
+                4. Home screen থেকে অ্যাপ এক্সেস করুন
+            `;
+            iosStep.style.display = 'block';
+            if (androidStep) androidStep.style.display = 'none';
+        }
+    }
+
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        });
+    }
+
+    // Detect if app is running in standalone mode
+    function checkDisplayMode() {
+        if (isAppInstalled()) {
+            console.log('App is running in standalone mode');
+            document.body.classList.add('standalone');
+            hideInstallPrompt();
+        }
+    }
+
+    // Run display mode check
+    checkDisplayMode();
+
+    // Add install help button to footer
+    setTimeout(() => {
+        const developerInfo = document.querySelector('.developer-info');
+        if (developerInfo && !document.querySelector('.install-help-btn')) {
             const installHelpBtn = document.createElement('button');
             installHelpBtn.className = 'install-help-btn';
             installHelpBtn.innerHTML = '📱 অ্যাপ ইন্সটল করুন';
             installHelpBtn.onclick = showInstallHelp;
             developerInfo.appendChild(installHelpBtn);
-        }, 2000);
-    </script>
+        }
+    }, 2000);
+
+    // Show welcome message
+    setTimeout(() => {
+        const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+        if (!hasSeenWelcome) {
+            setTimeout(() => {
+                if (confirm('🎉 SSCQuizMaster-এ স্বাগতম!\n\nঅ্যাপটি Home Screen-এ যোগ করে দ্রুত এক্সেস পেতে চান?')) {
+                    showInstallHelp();
+                }
+                localStorage.setItem('hasSeenWelcome', 'true');
+            }, 1000);
+        }
+    }, 500);
+</script>
 
     <style>
         /* Install Prompt Styles */

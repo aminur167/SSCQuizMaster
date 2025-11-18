@@ -975,15 +975,18 @@ body {
 .contact-details {
     display: none;
     background: rgba(255, 255, 255, 0.98);
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     transform: translateY(-10px);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    margin-top: 10px;
+    border: 2px solid #3498db;
 }
 
 .contact-details.show {
+    display: block !important;
     transform: translateY(0);
     opacity: 1;
 }
@@ -1036,12 +1039,13 @@ body {
 .contact-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 6px;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
     background: #f8f9fa;
     transition: all 0.3s ease;
     position: relative;
+    border: 1px solid #e9ecef;
 }
 
 .contact-item.clickable {
@@ -1053,51 +1057,58 @@ body {
 .contact-item.clickable:hover {
     background: #d1ecf1;
     border-color: #3498db;
-    transform: translateX(2px);
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2);
 }
 
 .contact-icon {
-    font-size: 1.1rem;
-    width: 30px;
-    height: 30px;
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(52, 152, 219, 0.1);
+    background: rgba(52, 152, 219, 0.15);
     border-radius: 50%;
     flex-shrink: 0;
+    color: #3498db;
 }
 
 .contact-text {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
 }
 
 .contact-text strong {
     color: #2c3e50;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .contact-text span {
     color: #555;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .contact-link {
     color: #3498db !important;
     font-weight: 600;
+    text-decoration: none;
 }
 
 .action-arrow {
-    font-size: 1rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    color: #3498db;
 }
 
 .contact-item.clickable:hover .action-arrow {
     opacity: 1;
+    transform: translateX(3px);
 }
 
 /* Quick Actions Contact */
@@ -1145,6 +1156,309 @@ body {
 
 .action-icon {
     font-size: 1rem;
+}
+
+/* ==================== ENHANCED INSTALL PROMPT STYLES ==================== */
+
+/* Install Prompt - Better Visibility */
+.install-prompt {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    display: none;
+    animation: slideInUp 0.5s ease;
+    max-width: 320px;
+    border: 2px solid #3498db;
+    backdrop-filter: blur(10px);
+}
+
+.install-prompt-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+}
+
+.install-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    animation: bounce 2s infinite;
+}
+
+.install-text h4 {
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.install-text p {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.install-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.install-btn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+}
+
+.install-btn:hover {
+    background: linear-gradient(135deg, #219653 0%, #27ae60 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+.close-install-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+.close-install-btn:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+/* Install Help Instructions - Better Background */
+.install-help {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.install-help-content {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    border: 2px solid #3498db;
+    animation: scaleIn 0.4s ease;
+}
+
+.install-help-content h3 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.install-steps {
+    margin: 25px 0;
+    text-align: left;
+}
+
+.step {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 10px;
+    border-left: 4px solid #3498db;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.step strong {
+    color: #3498db;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.close-help-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+.close-help-btn:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Install Help Button in Footer */
+.install-help-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+.install-help-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Enhanced Animations */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100px) scale(0.9);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* PWA Badge for Install Button */
+.install-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Enhanced animations for better UX */
+.install-prompt.show {
+    display: block !important;
+}
+
+.install-help.show {
+    display: flex !important;
+}
+
+.install-prompt.hide {
+    animation: slideOutDown 0.3s ease forwards;
+}
+
+/* Safe area support for notched devices */
+@supports (padding: max(0px)) {
+    .install-prompt {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        right: max(20px, env(safe-area-inset-right));
+        left: max(20px, env(safe-area-inset-left));
+    }
+}
+
+/* Simple Motivation Style */
+.simple-motivation {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #3498db;
+    animation: fadeIn 0.6s ease;
+}
+
+.simple-motivation h3 {
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+.simple-motivation p {
+    color: #7f8c8d;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.simple-motivation strong {
+    color: #e74c3c;
+    font-weight: bold;
 }
 
 /* Responsive Design */
@@ -1256,6 +1570,28 @@ body {
         padding: 8px 10px;
         font-size: 0.8rem;
     }
+    
+    /* Install Prompt Responsive */
+    .install-prompt {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        margin: 10px;
+    }
+    
+    .install-help-content {
+        margin: 20px;
+        padding: 25px;
+    }
+    
+    .install-buttons {
+        flex-direction: column;
+    }
+    
+    .install-btn, .close-install-btn {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1314,6 +1650,28 @@ body {
     .action-btn {
         width: 100%;
     }
+    
+    /* Install Prompt Mobile */
+    .install-prompt {
+        padding: 15px;
+    }
+    
+    .install-text h4 {
+        font-size: 1.1rem;
+    }
+    
+    .install-text p {
+        font-size: 0.85rem;
+    }
+    
+    .step {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+    
+    .install-help-content {
+        padding: 20px;
+    }
 }
 
 /* Animation for screen transitions */
@@ -1351,35 +1709,6 @@ body {
     animation: float 3s ease-in-out infinite;
 }
 
-/* Simple Motivation Style */
-.simple-motivation {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #3498db;
-    animation: fadeIn 0.6s ease;
-}
-
-.simple-motivation h3 {
-    color: #2c3e50;
-    margin-bottom: 8px;
-    font-size: 1.2rem;
-}
-
-.simple-motivation p {
-    color: #7f8c8d;
-    line-height: 1.5;
-    font-size: 0.9rem;
-}
-
-.simple-motivation strong {
-    color: #e74c3c;
-    font-weight: bold;
-}
-
 /* Responsive design for motivation section */
 @media (max-width: 768px) {
     .simple-motivation {
@@ -1411,212 +1740,20 @@ body {
     }
 }
 
-/* ==================== PWA INSTALL PROMPT STYLES ==================== */
-
-/* Install Prompt */
-.install-prompt {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #2c3e50;
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    display: none;
-    animation: slideInUp 0.3s ease;
-    max-width: 300px;
-    border-left: 4px solid #3498db;
-}
-
-.install-prompt-content {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-}
-
-.install-icon {
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-
-.install-text h4 {
-    margin: 0 0 5px 0;
-    font-size: 1.1rem;
-    color: white;
-}
-
-.install-text p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1.4;
-}
-
-.install-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.install-btn {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    flex: 1;
-}
-
-.install-btn:hover {
-    background: #219653;
-    transform: translateY(-1px);
-}
-
-.close-install-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    flex: 1;
-}
-
-.close-install-btn:hover {
-    background: #c0392b;
-    transform: translateY(-1px);
-}
-
-/* Install Help Instructions */
-.install-help {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 10001;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.install-help-content {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: scaleIn 0.3s ease;
-}
-
-.install-help-content h3 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-
-.install-steps {
-    margin: 20px 0;
-    text-align: left;
-}
-
-.step {
-    background: #f8f9fa;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border-left: 4px solid #3498db;
-    font-size: 0.9rem;
-    line-height: 1.4;
-}
-
-.step strong {
-    color: #2c3e50;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.close-help-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.close-help-btn:hover {
-    background: #2980b9;
-    transform: translateY(-1px);
-}
-
-/* Install Help Button in Footer */
-.install-help-btn {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.install-help-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
-}
-
-/* Animations */
-@keyframes slideInUp {
-    from {
-        transform: translateY(100px);
-        opacity: 0;
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .install-help-content {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
     }
-    to {
-        transform: translateY(0);
-        opacity: 1;
+    
+    .step {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
     }
-}
-
-@keyframes scaleIn {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutDown {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(100px);
-        opacity: 0;
+    
+    .step strong {
+        color: #3498db;
     }
 }
 
@@ -1624,440 +1761,27 @@ body {
 body.standalone {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
-/* Responsive Design for Install Prompt */
-@media (max-width: 768px) {
-    .install-prompt {
-        bottom: 10px;
-        right: 10px;
-        left: 10px;
-        max-width: none;
-    }
-    
-    .install-help-content {
-        margin: 20px;
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .install-prompt {
-        padding: 12px;
-    }
-    
-    .install-text h4 {
-        font-size: 1rem;
-    }
-    
-    .install-text p {
-        font-size: 0.8rem;
-    }
-    
-    .install-buttons {
-        flex-direction: column;
-    }
-    
-    .step {
-        font-size: 0.85rem;
-        padding: 10px;
-    }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .install-help-content {
-        background: #2c3e50;
-        color: white;
-    }
-    
-    .step {
-        background: #34495e;
-        color: white;
-    }
-    
-    .step strong {
-        color: #ecf0f1;
-    }
-}
-
-/* PWA Badge for Install Button */
-.install-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #e74c3c;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 0.6rem;
-    font-weight: bold;
-    animation: pulse 2s infinite;
-}
-
-/* Enhanced animations for better UX */
-.install-prompt.show {
-    display: block !important;
-}
-
-.install-help.show {
-    display: flex !important;
-}
-
-.install-prompt.hide {
-    animation: slideOutDown 0.3s ease forwards;
-}
-
-/* Safe area support for notched devices */
-@supports (padding: max(0px)) {
-    .install-prompt {
-        bottom: max(20px, env(safe-area-inset-bottom));
-        right: max(20px, env(safe-area-inset-right));
-    }
-}
-/* ==================== CONTACT & DEVELOPER SECTION ==================== */
+/* Ensure contact section is properly visible */
 .contact-developer-section {
-    margin-top: 20px;
+    margin-top: 25px;
     position: relative;
+    z-index: 100;
 }
 
-/* Contact Toggle Button */
 .contact-toggle-container {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
-.contact-toggle-btn {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+/* Make sure contact details don't get hidden */
+.contact-details[style] {
+    display: none !important;
 }
 
-.contact-toggle-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-}
-
-.contact-toggle-btn.active {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-}
-
-.contact-toggle-btn.active .toggle-arrow {
-    transform: rotate(180deg);
-}
-
-.contact-icon {
-    font-size: 1rem;
-}
-
-.toggle-arrow {
-    transition: transform 0.3s ease;
-    font-size: 0.7rem;
-}
-
-/* Developer Info */
-.developer-info {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-.developer-header h3 {
-    font-size: 1.3rem;
-    margin-bottom: 4px;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.developer-header p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    font-weight: 300;
-}
-
-/* Contact Details */
-.contact-details {
-    display: none;
-    background: rgba(255, 255, 255, 0.98);
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    transform: translateY(-10px);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.contact-details.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.contact-container {
-    padding: 0;
-}
-
-.contact-header {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-    color: white;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.contact-header h3 {
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-.close-contact {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.3s ease;
-}
-
-.close-contact:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.contact-content {
-    padding: 20px;
-}
-
-.contact-info-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    background: #f8f9fa;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.contact-item.clickable {
-    cursor: pointer;
-    background: #e8f4fd;
-    border: 2px solid transparent;
-}
-
-.contact-item.clickable:hover {
-    background: #d1ecf1;
-    border-color: #3498db;
-    transform: translateX(2px);
-}
-
-.contact-icon {
-    font-size: 1.1rem;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(52, 152, 219, 0.1);
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.contact-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.contact-text strong {
-    color: #2c3e50;
-    font-size: 0.8rem;
-}
-
-.contact-text span {
-    color: #555;
-    font-size: 0.85rem;
-}
-
-.contact-link {
-    color: #3498db !important;
-    font-weight: 600;
-}
-
-.action-arrow {
-    font-size: 1rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.contact-item.clickable:hover .action-arrow {
-    opacity: 1;
-}
-
-/* Quick Actions Contact */
-.quick-actions-contact {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-width: 100px;
-}
-
-.call-btn {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-    color: white;
-}
-
-.call-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3);
-}
-
-.email-btn {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
-}
-
-.email-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
-}
-
-.action-icon {
-    font-size: 1rem;
-}
-
-/* Responsive Design for Contact Section */
-@media (max-width: 768px) {
-    .contact-toggle-btn {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-    }
-    
-    .developer-header h3 {
-        font-size: 1.1rem;
-    }
-    
-    .developer-header p {
-        font-size: 0.8rem;
-    }
-    
-    .contact-info-grid {
-        gap: 8px;
-    }
-    
-    .contact-item {
-        padding: 8px;
-    }
-    
-    .contact-text strong {
-        font-size: 0.75rem;
-    }
-    
-    .contact-text span {
-        font-size: 0.8rem;
-    }
-    
-    .action-btn {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .contact-toggle-btn {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-    }
-    
-    .developer-info {
-        padding: 12px;
-    }
-    
-    .developer-header h3 {
-        font-size: 1rem;
-    }
-    
-    .developer-header p {
-        font-size: 0.75rem;
-    }
-    
-    .contact-content {
-        padding: 15px;
-    }
-    
-    .contact-item {
-        flex-direction: column;
-        text-align: center;
-        gap: 8px;
-    }
-    
-    .contact-text {
-        align-items: center;
-    }
-    
-    .quick-actions-contact {
-        flex-direction: column;
-    }
-    
-    .action-btn {
-        width: 100%;
-    }
-}
-
-/* Floating animation for developer section */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-2px); }
-}
-
-.developer-header h3 {
-    animation: float 3s ease-in-out infinite;
-}
-/* Floating animation for developer section */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-2px); }
-}
-
-.developer-header h3 {
-    animation: float 3s ease-in-out infinite;
+.contact-details.show[style] {
+    display: block !important;
 }

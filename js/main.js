@@ -84,7 +84,7 @@ document.querySelectorAll('.admin-card').forEach(card => {
     });
 });
 
-// ==================== PWA INSTALL LOGIC ====================
+// ==================== ENHANCED PWA INSTALL LOGIC ====================
 
 // Initialize PWA Install System
 function initPWAInstall() {
@@ -99,14 +99,14 @@ function initPWAInstall() {
         e.preventDefault();
         deferredPrompt = e;
         
-        console.log('PWA: App can be installed');
+        console.log('PWA: App can be installed - BeforeInstallPrompt event fired');
         
-        // Show install prompt after 8 seconds
+        // Show install prompt after 3 seconds
         setTimeout(() => {
             if (!isAppInstalled()) {
                 showInstallPrompt();
             }
-        }, 8000);
+        }, 3000);
     });
 
     // Install button click
@@ -140,8 +140,11 @@ async function handleInstallClick() {
     }
     
     try {
+        console.log('PWA: Showing install prompt to user');
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
+        
+        console.log('PWA: User choice:', outcome);
         
         if (outcome === 'accepted') {
             console.log('PWA: User installed the app');
@@ -149,6 +152,10 @@ async function handleInstallClick() {
             showInstallSuccess();
         } else {
             console.log('PWA: User dismissed the install prompt');
+            // Show manual instructions if user declines
+            setTimeout(() => {
+                showInstallHelp();
+            }, 1000);
         }
         
         deferredPrompt = null;
@@ -158,26 +165,78 @@ async function handleInstallClick() {
     }
 }
 
-// Show install prompt
+// Show install prompt with better animation
 function showInstallPrompt() {
     if (installPrompt && !isAppInstalled()) {
         installPrompt.style.display = 'block';
+        installPrompt.classList.add('show');
         console.log('PWA: Showing install prompt');
+        
+        // Auto hide after 30 seconds
+        setTimeout(() => {
+            if (installPrompt.style.display === 'block') {
+                hideInstallPrompt();
+            }
+        }, 30000);
     }
 }
 
-// Hide install prompt
+// Hide install prompt with animation
 function hideInstallPrompt() {
     if (installPrompt) {
-        installPrompt.style.display = 'none';
+        installPrompt.classList.remove('show');
+        installPrompt.classList.add('hide');
+        setTimeout(() => {
+            installPrompt.style.display = 'none';
+            installPrompt.classList.remove('hide');
+        }, 300);
     }
 }
 
-// Show install help instructions
+// Show install help instructions with better content
 function showInstallHelp() {
     if (installHelp) {
-        installHelp.style.display = 'block';
+        installHelp.style.display = 'flex';
+        installHelp.classList.add('show');
         hideInstallPrompt();
+        
+        // Update instructions based on device
+        updateInstallInstructions();
+    }
+}
+
+// Update install instructions based on device
+function updateInstallInstructions() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    const androidStep = document.querySelector('.step:nth-child(1)');
+    const iosStep = document.querySelector('.step:nth-child(2)');
+    
+    if (isAndroid && androidStep) {
+        androidStep.innerHTML = `
+            <strong>Android-এ ইন্সটল করুন:</strong><br>
+            1. Chrome browser-এ ⋮ তিন ডট মেনু ট্যাপ করুন<br>
+            2. "Home screen-এ যোগ করুন" সিলেক্ট করুন<br>
+            3️. "যোগ করুন" বাটন ট্যাপ করুন<br>
+            4. এখন Home screen থেকে অ্যাপ এক্সেস করুন
+        `;
+        androidStep.style.display = 'block';
+        if (iosStep) iosStep.style.display = 'none';
+    } else if (isIOS && iosStep) {
+        iosStep.innerHTML = `
+            <strong>iPhone-এ ইন্সটল করুন:</strong><br>
+            1. Safari-তে ⎙ Share বাটন ট্যাপ করুন<br>
+            2. নিচে স্ক্রল করে "Home Screen-এ যোগ করুন" ট্যাপ করুন<br>
+            3️. "যোগ করুন" বাটন ট্যাপ করুন<br>
+            4. এখন Home screen থেকে অ্যাপ এক্সেস করুন
+        `;
+        iosStep.style.display = 'block';
+        if (androidStep) androidStep.style.display = 'none';
+    } else {
+        // Show both for other devices
+        if (androidStep) androidStep.style.display = 'block';
+        if (iosStep) iosStep.style.display = 'block';
     }
 }
 
@@ -185,12 +244,45 @@ function showInstallHelp() {
 function hideInstallHelp() {
     if (installHelp) {
         installHelp.style.display = 'none';
+        installHelp.classList.remove('show');
     }
 }
 
 // Show install success message
 function showInstallSuccess() {
-    alert('🎉 অ্যাপটি সফলভাবে ইন্সটল হয়েছে! এখন আপনি Home Screen থেকে এক্সেস করতে পারবেন।');
+    // Create a custom success message
+    const successMessage = document.createElement('div');
+    successMessage.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        z-index: 10002;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        animation: scaleIn 0.4s ease;
+        border: 2px solid #2ecc71;
+        max-width: 300px;
+        width: 90%;
+    `;
+    successMessage.innerHTML = `
+        <div style="font-size: 3rem; margin-bottom: 15px;">🎉</div>
+        <h3 style="margin: 0 0 12px 0; font-size: 1.3rem; font-weight: bold;">সফলভাবে ইন্সটল হয়েছে!</h3>
+        <p style="margin: 0; font-size: 0.95rem; line-height: 1.4;">অ্যাপটি আপনার Home Screen-এ যোগ করা হয়েছে। এখন থেকে দ্রুত এক্সেস করতে পারবেন!</p>
+    `;
+    
+    document.body.appendChild(successMessage);
+    
+    setTimeout(() => {
+        successMessage.style.animation = 'scaleIn 0.3s ease reverse forwards';
+        setTimeout(() => {
+            successMessage.remove();
+        }, 300);
+    }, 3000);
 }
 
 // Check if app is already installed
@@ -219,35 +311,69 @@ function addInstallHelpButton() {
             installHelpBtn.onclick = showInstallHelp;
             developerInfo.appendChild(installHelpBtn);
         }
-    }, 3000);
+    }, 2000);
 }
 
-// Show manual install instructions
-function showManualInstallInstructions() {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isAndroid = /Android/.test(navigator.userAgent);
-    
-    let message = '';
-    
-    if (isIOS) {
-        message = `iPhone-এ অ্যাপ ইন্সটল করতে:
-1. Safari browser-এ এই পেজটি ওপেন করুন
-2. নিচের দিকে Share button (⎙) ট্যাপ করুন
-3. "Add to Home Screen" সিলেক্ট করুন
-4. "Add" বাটন ট্যাপ করুন`;
-    } else if (isAndroid) {
-        message = `Android-এ অ্যাপ ইন্সটল করতে:
-1. Chrome browser-এ এই পেজটি ওপেন করুন
-2.右上角三点菜单 (⋮) ট্যাপ করুন
-3. "Add to Home Screen" সিলেক্ট করুন
-4. "Add" বাটন ট্যাপ করুন`;
-    } else {
-        message = `আপনার ডিভাইসে অ্যাপ ইন্সটল করতে:
-- Mobile browser-এর menu-তে "Add to Home Screen" option খুঁজুন
-- অথবা browser-এর settings-এ PWA install option দেখুন`;
+// ==================== ENHANCED CONTACT SYSTEM ====================
+
+// Initialize contact system
+function initContactSystem() {
+    const contactToggle = document.getElementById('contactToggle');
+    const contactDetails = document.getElementById('contactDetails');
+    const closeContact = document.getElementById('closeContact');
+    let isContactOpen = false;
+
+    // Toggle contact details with enhanced animation
+    if (contactToggle && contactDetails) {
+        contactToggle.addEventListener('click', function() {
+            isContactOpen = !isContactOpen;
+            if (isContactOpen) {
+                contactDetails.style.display = 'block';
+                contactToggle.classList.add('active');
+                setTimeout(() => {
+                    contactDetails.classList.add('show');
+                }, 10);
+            } else {
+                contactDetails.classList.remove('show');
+                contactToggle.classList.remove('active');
+                setTimeout(() => {
+                    contactDetails.style.display = 'none';
+                }, 400);
+            }
+        });
+
+        // Close contact details
+        if (closeContact) {
+            closeContact.addEventListener('click', function() {
+                contactDetails.classList.remove('show');
+                contactToggle.classList.remove('active');
+                setTimeout(() => {
+                    contactDetails.style.display = 'none';
+                    isContactOpen = false;
+                }, 400);
+            });
+        }
     }
+}
+
+// Enhanced phone call function
+function callPhone(phoneNumber) {
+    const userConfirmed = confirm(`আপনি কি ${phoneNumber} নম্বরে কল করতে চান?`);
+    if (userConfirmed) {
+        window.open(`tel:${phoneNumber}`);
+        // Log the action
+        console.log(`Call initiated to: ${phoneNumber} at ${new Date().toLocaleString()}`);
+    }
+}
+
+// Enhanced email function
+function sendEmail(emailAddress) {
+    const subject = encodeURIComponent('SSCQuizMaster সম্পর্কে যোগাযোগ');
+    const body = encodeURIComponent(`প্রিয় আমিনুর ইসলাম,\n\nআমি আপনার SSCQuizMaster ওয়েবসাইটটি দেখেছি এবং খুবই impressed হয়েছি। আমি নিচের বিষয়ে আপনার সাথে যোগাযোগ করতে চাই:\n\n- [আপনার বার্তা এখানে লিখুন]\n\n\nআপনার সাড়ার অপেক্ষায় রইলাম।\n\nশুভেচ্ছান্তে,\n[আপনার নাম]`);
+    window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
     
-    alert(message);
+    // Log the action
+    console.log(`Email initiated to: ${emailAddress} at ${new Date().toLocaleString()}`);
 }
 
 // ==================== APP INITIALIZATION ====================
@@ -258,6 +384,9 @@ function initApp() {
     
     // Initialize PWA Install System
     initPWAInstall();
+    
+    // Initialize Contact System
+    initContactSystem();
     
     // Load questions from localStorage if available
     if (typeof questionManager !== 'undefined') {
@@ -276,7 +405,7 @@ function showWelcomeMessage() {
     const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
     if (!hasSeenWelcome) {
         setTimeout(() => {
-            if (confirm('🎉 SSCQuizMaster-এ স্বাগতম! অ্যাপটি Home Screen-এ যোগ করে দ্রুত এক্সেস পেতে চান?')) {
+            if (confirm('🎉 SSCQuizMaster-এ স্বাগতম!\n\nঅ্যাপটি Home Screen-এ যোগ করে দ্রুত এক্সেস পেতে চান?')) {
                 showInstallHelp();
             }
             localStorage.setItem('hasSeenWelcome', 'true');
